@@ -1,0 +1,314 @@
+# mamaope_legal AI CDSS - Git Ignore File
+# Comprehensive ignore patterns for Python, FastAPI, Docker, AI/ML, and medical data
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*regal-autonomy-454806-d1-edf68610c57a.json
+
+# Virtual Environments
+venv/
+rag_venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.env/
+
+# Environment Variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.staging
+*.env
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+postgres_data/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+.docker/
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+terraform.plan
+terraform.tfstate.*
+*.tfplan
+*.tfstate.lock.info
+
+# AI/ML and Vector Databases
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.model
+*.weights
+embeddings/
+checkpoints/
+wandb/
+mlruns/
+.neptune/
+
+# Medical Data and PHI (Patient Health Information)
+# CRITICAL: Never commit medical data or PHI
+data/
+medical_data/
+patient_data/
+*.csv
+*.xlsx
+*.xls
+# Only ignore JSON files in specific sensitive directories
+*/credentials/*.json
+*/secrets/*.json
+*credentials*.json
+*secrets*.json
+*.xml
+*.dcm
+*.nii
+*.nii.gz
+*.dicom
+*.jpg
+*.jpeg
+*.png
+*.tiff
+*.bmp
+*.gif
+*.pdf
+*.doc
+*.docx
+*.rtf
+
+# Credentials and Secrets
+credentials/
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+service-account*.json
+*-key.json
+*-credentials.json
+*-token.json
+*-secret.json
+
+# Cloud Provider Credentials
+.aws/
+.gcp/
+.azure/
+google-credentials.json
+aws-credentials.json
+azure-credentials.json
+
+# Temporary Files
+tmp/
+temp/
+.tmp/
+.temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Node.js (if using frontend tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+.pnpm-debug.log*
+
+# Coverage Reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+.idea/
+
+# Project Specific
+lambda_package/
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Alembic
+alembic/versions/*.pyc
+
+# FastAPI specific
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Medical AI Specific
+# Never commit these sensitive files
+patient_records/
+medical_images/
+diagnostic_data/
+treatment_plans/
+*.dicom
+*.nifti
+*.analyze
+*.img
+*.hdr
+
+# Vector Database Data
+vector_data/
+embeddings_cache/
+milvus_data/
+zilliz_data/
+
+# API Keys and Tokens
+api_keys.txt
+tokens.txt
+secrets.txt
+*.secret
+*.key
+*.token
+
+# Backup Files
+backup/
+backups/
+*.backup
+*.bak
+*.old
+
+# Test Data
+test_data/
+sample_data/
+mock_data/
+*.test.json
+*.sample.*
+
+# Documentation Build
+docs/_build/
+docs/build/
+site/
+
+# Local Development
+local/
+dev/
+development/
+*.local
+*.dev
+*.development

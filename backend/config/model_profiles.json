@@ -1,0 +1,95 @@
+{
+  "profiles": [
+    {
+      "name": "conservative",
+      "provider": "vertex_ai",
+      "model_id": "gemini-2.5-flash",
+      "temperature": 0.1,
+      "max_tokens": 2000,
+      "top_p": 0.8,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "stop_sequences": [],
+      "description": "Conservative settings for factual drug information and safety-critical responses"
+    },
+    {
+      "name": "balanced",
+      "provider": "vertex_ai", 
+      "model_id": "gemini-2.5-flash",
+      "temperature": 0.3,
+      "max_tokens": 3000,
+      "top_p": 1.0,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "stop_sequences": [],
+      "description": "Balanced settings for clinical reasoning and general medical queries"
+    },
+    {
+      "name": "creative",
+      "provider": "vertex_ai",
+      "model_id": "gemini-2.5-flash", 
+      "temperature": 0.5,
+      "max_tokens": 4000,
+      "top_p": 1.0,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "stop_sequences": [],
+      "description": "Creative settings for complex diagnostic cases requiring innovative thinking"
+    },
+    {
+      "name": "fast",
+      "provider": "vertex_ai",
+      "model_id": "gemini-2.5-flash",
+      "temperature": 0.2,
+      "max_tokens": 1500,
+      "top_p": 0.9,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "stop_sequences": [],
+      "description": "Fast settings for quick responses with reduced token usage"
+    },
+    {
+      "name": "high_accuracy",
+      "provider": "vertex_ai",
+      "model_id": "gemini-2.5-flash",
+      "temperature": 0.1,
+      "max_tokens": 4000,
+      "top_p": 0.8,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "stop_sequences": [],
+      "description": "High accuracy settings using the Pro model for critical medical decisions"
+    }
+  ],
+  "query_type_mapping": {
+    "drug_information": "conservative",
+    "drug_interaction": "conservative", 
+    "differential_diagnosis": "balanced",
+    "clinical_guidance": "balanced",
+    "general_query": "balanced"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

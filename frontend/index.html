@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mamaope_legal AI</title>
+    <link rel="icon" type="image/x-icon" href="https://mamaope_legal.mamaope.com/favicon.ico">
+    <link rel="stylesheet" href="style.css?v=20241014-heading-split-fix">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container" id="appContainer">
+        <!-- Sidebar for Authenticated Users (Hidden by default) -->
+        <aside class="sidebar" id="sidebar" style="display: none;">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <h2 class="welcome-logo">
+                        <span class="logo-health">Legal</span><span class="logo-navy">AI</span>
+                    </h2>
+                </div>
+                <button class="btn-new-chat" onclick="startNewChat()">
+                    <i class="fas fa-plus"></i>
+                    <span>New Chat</span>
+                </button>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="sessions-header">
+                    <h3>Sessions</h3>
+                </div>
+                <div class="sessions-list" id="sessionsList">
+                    <!-- Sessions will be dynamically loaded here -->
+                    <div class="empty-state" id="emptySessionsState">
+                        <i class="fas fa-comments"></i>
+                        <p>No conversations yet</p>
+                        <small>Start a new chat to begin</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <button class="btn-logout btn-logout-full" onclick="logout()" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Landing Page for Unauthenticated Users -->
+        <div class="landing-page" id="landingPage">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo">
+                    <h2 class="welcome-logo">
+                        <span class="logo-health">Legal</span><span class="logo-navy">AI</span>
+                    </h2>
+                    </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle light/dark theme">
+                        <div class="theme-toggle-slider">
+                            <i class="theme-toggle-icon fas fa-sun" id="themeIcon"></i>
+                        </div>
+                    </button>
+                    <button class="btn btn-outline" onclick="showAuthModal('login')">Sign In</button>
+                    <button class="btn btn-primary" onclick="showAuthModal('register')">Get Started</button>
+                </div>
+                
+                <!-- User Profile (Shown when authenticated) -->
+                <div class="header-user-profile" id="headerUserProfile" style="display: none;">
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle light/dark theme">
+                        <div class="theme-toggle-slider">
+                            <i class="theme-toggle-icon fas fa-sun" id="headerThemeIcon"></i>
+                        </div>
+                    </button>
+                    
+                    <div class="header-user-menu">
+                        <button class="header-user-button" onclick="toggleUserMenu()" aria-label="User menu" aria-expanded="false" aria-haspopup="true">
+                            <div class="header-user-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="header-user-info">
+                                <span class="header-user-name" id="headerUserName">User</span>
+                                <span class="header-user-role" id="headerUserRole">Legal Professional</span>
+                            </div>
+                            <i class="fas fa-chevron-down header-dropdown-icon"></i>
+                        </button>
+                        
+                        <div class="user-dropdown-menu" id="userDropdownMenu" style="display: none;">
+                            <div class="user-dropdown-header">
+                                <div class="user-dropdown-avatar">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="user-dropdown-info">
+                                    <div class="user-dropdown-name" id="dropdownUserName">User</div>
+                                    <div class="user-dropdown-email" id="dropdownUserEmail">user@example.com</div>
+                                </div>
+                            </div>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="#" class="user-dropdown-item" onclick="showProfile(); return false;">
+                                <i class="fas fa-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="#" class="user-dropdown-item" onclick="showSettings(); return false;">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                            <a href="#" class="user-dropdown-item" onclick="showHelp(); return false;">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Help & Support</span>
+                            </a>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="#" class="user-dropdown-item user-dropdown-item-danger" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Chat Interface -->
+            <main class="main-content">
+                <div class="chat-container">
+                    <div class="chat-messages" id="landingChatMessages">
+                        <div class="welcome-message">
+                            <div class="welcome-content">
+                                <h2 class="welcome-logo">
+                                    <span class="logo-health">Legal</span><span class="logo-navy">AI</span>
+                                </h2>
+                                <h3>Welcome to LegalAI</h3>
+                                <p></p>
+                            </div>
+                        </div>
+                        </div>
+                        
+                    <div class="input-area">
+                        <div class="input-container">
+                            <div class="input-icons">
+                                <div class="icon-deep-reasoning" title="AI-powered clinical reasoning">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                            </div>
+                            <textarea 
+                                id="landingMessageInput" 
+                                placeholder="Welcome to LegalAI How can I assist you today?"
+                                rows="1"
+                                aria-label="Message input"
+                            ></textarea>
+                            <button id="landingSendButton" onclick="sendMessage()" disabled aria-label="Send message">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <!-- Loading indicator -->
+                        <div class="loading-indicator" id="loadingIndicator" style="display: none;">
+                            <div class="loading-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span class="loading-text">Analyzing...</span>
+                        </div>
+                        </div>
+                        
+                    <!-- Disclaimer Section -->
+                    <div class="disclaimer-section">
+                        <div class="disclaimer">
+                            <i class="fas fa-info-circle"></i>
+                            <span>This platform provides general legal information for professional use and does not replace independent legal judgment.</span>
+                        </div>
+                    </div>
+
+                    <div class="sample-questions">
+                        <h3>Try these examples:</h3>
+                        <div class="sample-grid">
+
+                            <!-- Category: Rights and Freedoms -->
+                            <div class="sample-category">
+                                <h5><i class="fas fa-balance-scale"></i> Rights and Freedoms</h5>
+                                <button class="sample-question" onclick="useSamplePrompt('rights_freedom_of_expression')">
+                                    <i class="fas fa-comment-dots"></i>
+                                    <span>What does the Constitution of Uganda say about freedom of speech and expression?</span>
+                                </button>
+                                <button class="sample-question" onclick="useSamplePrompt('rights_arrest_procedure')">
+                                    <i class="fas fa-handcuffs"></i>
+                                    <span>What are the rights of a person when they are arrested according to the Constitution?</span>
+                                </button>
+                            </div>
+
+                            <!-- Category: Governance and Leadership -->
+                            <div class="sample-category">
+                                <h5><i class="fas fa-landmark"></i> Governance and Leadership</h5>
+                                <button class="sample-question" onclick="useSamplePrompt('governance_president_powers')">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>What powers does the President of Uganda have under the Constitution?</span>
+                                </button>
+                                <button class="sample-question" onclick="useSamplePrompt('governance_parliament_functions')">
+                                    <i class="fas fa-university"></i>
+                                    <span>What are the main functions of Parliament according to the Ugandan Constitution?</span>
+                                </button>
+                            </div>
+
+                            <!-- Category: Citizenship and Elections -->
+                            <div class="sample-category">
+                                <h5><i class="fas fa-passport"></i> Citizenship and Elections</h5>
+                                <button class="sample-question" onclick="useSamplePrompt('citizenship_dual_nationality')">
+                                    <i class="fas fa-globe-africa"></i>
+                                    <span>Can a Ugandan hold dual citizenship according to the Constitution?</span>
+                                </button>
+                                <button class="sample-question" onclick="useSamplePrompt('elections_qualifications_mp')">
+                                    <i class="fas fa-vote-yea"></i>
+                                    <span>What qualifications does one need to be elected as a Member of Parliament in Uganda?</span>
+                                </button>
+                            </div>
+
+                            <!-- Category: Justice and Enforcement -->
+                            <div class="sample-category">
+                                <h5><i class="fas fa-gavel"></i> Justice and Enforcement</h5>
+                                <button class="sample-question" onclick="useSamplePrompt('justice_judicial_independence')">
+                                    <i class="fas fa-scale-balanced"></i>
+                                    <span>How does the Constitution of Uganda ensure the independence of the Judiciary?</span>
+                                </button>
+                                <button class="sample-question" onclick="useSamplePrompt('justice_constitutional_petition')">
+                                    <i class="fas fa-file-signature"></i>
+                                    <span>How can a citizen challenge a law that violates their constitutional rights?</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <span class="logo-health">Legal</span><span class="logo-navy">AI</span>
+                        </div>
+                    </div>
+                    <div class="footer-copyright">
+                        <span>&copy; 2025 LegalAI. All rights reserved.</span>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#" onclick="showTerms()">Terms of Service</a>
+                        <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+                        <a href="#" onclick="showSupport()">Support</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+    </div>
+
+    <!-- Authentication Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Sign In</h2>
+                <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="authForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" autocomplete="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                    </div>
+                    <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+                    </div>
+                    <div class="form-group" id="fullNameGroup" style="display: none;">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Sign In</button>
+                </form>
+                <div class="modal-footer">
+                    <p id="modalFooterText">Don't have an account? <a href="#" onclick="toggleAuthMode()">Sign up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Markdown Parser and Sanitizer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <!-- AGGRESSIVE CACHE BUST - Using timestamp in filename -->
+    <script>
+        // Load script with timestamp to force browser to fetch new version
+        const timestamp = new Date().getTime();
+        const script = document.createElement('script');
+        script.src = `script.js?cachebust=${timestamp}`;
+        script.onload = () => console.log('✅ Script loaded successfully at:', new Date().toISOString());
+        script.onerror = () => console.error('❌ Failed to load script.js');
+        document.body.appendChild(script);
+    </script>
+</body>
+</html>
