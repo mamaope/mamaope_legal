@@ -1,5 +1,6 @@
 import os
 import time
+import json
 from typing import List, Dict, Tuple, Any
 from dotenv import load_dotenv
 from pymilvus import MilvusClient
@@ -18,7 +19,6 @@ load_dotenv()
 
 class ZillizService:
     """Service for interacting with Zilliz Cloud."""
-
     def __init__(self):
         """Initializes the MilvusClient and Azure OpenAI client."""
         try:
@@ -80,84 +80,12 @@ class ZillizService:
         Returns:
             list: Reranked list of results.
         """
-        if not search_results or len(search_results) <= k:
-            return search_results
-        
-        # Initialize base scores from distances
-        for result in search_results:
-            result['score'] = result.get('distance', 0.0)
-        
-        selected = []
-        remaining = list(search_results)
-        source_counts = {}  # Track selections per source
-        
-        # Select first result (highest relevance)
-        remaining.sort(key=lambda x: x.get('distance', 0), reverse=True)
-        first = remaining.pop(0)
-        selected.append(first)
-        source_path = first.get('entity', {}).get('file_path', 'unknown')
-        source_counts[source_path] = 1
-        
-        # Calculate max chunks per source (enforce stronger diversity)
-        max_chunks_per_source = max(2, k // 4)  # At most k/4 chunks from same source
-        
-        # Iteratively select remaining results
-        while len(selected) < k and remaining:
-            best_score = -float('inf')
-            best_idx = -1
+
+        if not search_results:
+            return []
             
-            for idx, candidate in enumerate(remaining):
-                # Relevance score (cosine similarity, already adjusted for age)
-                relevance = candidate.get('distance', 0)
-                
-                # Diversity score: penalize sources already selected
-                candidate_source = candidate.get('entity', {}).get('file_path', 'unknown')
-                source_count = source_counts.get(candidate_source, 0)
-                
-                # Hard limit: skip if source is already maxed out
-                if source_count >= max_chunks_per_source:
-                    continue
-                
-                # Skip if source is overrepresented
-                if source_count >= max_chunks_per_source:
-                    continue
-                
-                # Progressive diversity bonus (stronger penalties)
-                # 0 selections: 1.5, 1 selection: 1.0, 2: 0.5, 3+: 0.2
-                if source_count == 0:
-                    diversity_bonus = 1.5  # Strong bonus for new sources
-                elif source_count == 1:
-                    diversity_bonus = 1.0
-                elif source_count == 2:
-                    diversity_bonus = 0.5
-                else:
-                    diversity_bonus = 0.2
-                
-                # MMR score: balance relevance and diversity
-                mmr_score = (lambda_param * relevance) + ((1 - lambda_param) * diversity_bonus)
-                
-                if mmr_score > best_score:
-                    best_score = mmr_score
-                    best_idx = idx
-            
-            if best_idx >= 0:
-                selected_result = remaining.pop(best_idx)
-                selected.append(selected_result)
-                source_path = selected_result.get('entity', {}).get('file_path', 'unknown')
-                source_counts[source_path] = source_counts.get(source_path, 0) + 1
-                
-                # Update source count
-                source_counts[source_path] = source_counts.get(source_path, 0) + 1
-            else:
-                # No valid candidates found, break
-                break
-        
-        # Log diversity metrics
-        logger.info(f"📚 Source diversity: {len(source_counts)} unique sources selected")
-        for source, count in sorted(source_counts.items(), key=lambda x: x[1], reverse=True)[:5]:
-            logger.info(f"   • {os.path.basename(source)}: {count} chunk(s)")
-        
-        return selected
+        search_results.sort(key=lambda x: x.get('distance', 0), reverse=True)
+        return search_results[:k]
 
     def search_legal_knowledge(self, query: str, k: int = 5) -> Tuple[List[Dict[str, Any]], List[str]]:
         """
@@ -182,8 +110,7 @@ class ZillizService:
             query_embedding = self.generate_query_embedding(query)
             embedding_time = time.time() - embedding_start
 
-            # Step 2: Vector similarity search - retrieve more for diversity
-            retrieve_k = min(k * 6, 50)  # Get 6x results for better diversity selection (increased from 4x)
+            retrieve_k = min(k * 3, 30)
             vector_search_start = time.time()
             logger.info(f"🎯 Vector search in '{self.collection_name}' (retrieving {retrieve_k}, returning {k})...")
             
