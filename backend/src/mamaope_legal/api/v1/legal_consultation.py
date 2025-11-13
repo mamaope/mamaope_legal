@@ -1,10 +1,8 @@
-"""
-Router for Mamaope Legal AI consultation service.
-"""
-
 import logging
+import json
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from mamaope_legal.core.database import get_db
 from mamaope_legal.core.response_utils import create_success_response, create_error_response, ResponseTimer
